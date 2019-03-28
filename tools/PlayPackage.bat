@@ -74,11 +74,13 @@ echo.
 
 rem 打包
 rem 不使用call调用时,会在打包命令执行完后自动退出
-@echo on
 call play war %MAIN% --exclude .svn:logs:target:tmp -o %OUT_PATH%
-@echo off
+if not "%errorlevel%" == "0" echo 打包失败... && goto FAIL
 
 rem 去源码
+if not exist "%OUT_PATH%\WEB-INF\application\app" echo 去源码失败... && goto END
+if not exist "%OUT_PATH%\WEB-INF\application\modules" echo 去源码失败... && goto END
+
 cd /d "%OUT_PATH%\WEB-INF\application\app"
 :CLEAR
 for /f "delims= tokens=*" %%i in ('dir /s /b') do (
@@ -97,6 +99,7 @@ for /f "delims= tokens=*" %%i in ('dir /s /b') do (
 )
 if "%cd%" == "%OUT_PATH%\WEB-INF\application\app" cd /d "%OUT_PATH%\WEB-INF\application\modules" && goto CLEAR
 
+:END
 echo.    
 echo      / )
 echo    /  /________
@@ -106,4 +109,5 @@ echo _       _)
 echo  \______)
 echo.
 
+:FAIL
 pause
