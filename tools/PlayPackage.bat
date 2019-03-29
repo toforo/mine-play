@@ -72,6 +72,10 @@ echo _       _)
 echo  \______)
 echo.
 
+rem 打包前先删除预编译目录及临时文件目录,否则可能导致打包失败
+rd /s /q "%cd%\%MAIN%\precompiled"
+rd /s /q "%cd%\%MAIN%\tmp"
+
 rem 打包
 rem 不使用call调用时,会在打包命令执行完后自动退出
 call play war %MAIN% --exclude .svn:logs:target:tmp -o %OUT_PATH%
