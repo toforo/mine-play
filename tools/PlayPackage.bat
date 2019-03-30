@@ -100,7 +100,7 @@ for /f "delims= tokens=*" %%i in ('dir /s /b') do (
 		cd. > %%i
 	)
 )
-if "%cd%" == "%OUT_PATH%\WEB-INF\application\app" cd /d "%OUT_PATH%\WEB-INF\application\modules" && goto CLEAR
+if "%cd%" == "%OUT_PATH%\WEB-INF\application\app" cd /d "%OUT_PATH%\WEB-INF\application\modules" 2>NUL && goto CLEAR
 
 :END
 echo.    
