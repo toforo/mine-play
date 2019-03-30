@@ -73,19 +73,18 @@ echo  \______)
 echo.
 
 rem 打包前先删除预编译目录及临时文件目录,否则可能导致打包失败
-rd /s /q "%cd%\%MAIN%\precompiled"
-rd /s /q "%cd%\%MAIN%\tmp"
+rd /s /q "%cd%\%MAIN%\precompiled" 2>NUL
+rd /s /q "%cd%\%MAIN%\tmp" 2>NUL
 
 rem 打包
 rem 不使用call调用时,会在打包命令执行完后自动退出
 call play war %MAIN% --exclude .svn:logs:target:tmp -o %OUT_PATH%
+
 if not "%errorlevel%" == "0" echo 打包失败... && goto FAIL
+if not exist "%OUT_PATH%\WEB-INF" echo 打包异常,找不到包... && goto END
 
 rem 去源码
-if not exist "%OUT_PATH%\WEB-INF\application\app" echo 去源码失败... && goto END
-if not exist "%OUT_PATH%\WEB-INF\application\modules" echo 去源码失败... && goto END
-
-cd /d "%OUT_PATH%\WEB-INF\application\app"
+cd /d "%OUT_PATH%\WEB-INF\application\app" || echo 去源码失败... && goto END
 :CLEAR
 for /f "delims= tokens=*" %%i in ('dir /s /b') do (
 	set FILE=%%i
